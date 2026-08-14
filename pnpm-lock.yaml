@@ -11,6 +11,9 @@ importers:
       citty:
         specifier: ^0.2.2
         version: 0.2.2
+      js-yaml:
+        specifier: 5.2.2
+        version: 5.2.2
     devDependencies:
       '@types/node':
         specifier: 26.2.0

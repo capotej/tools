@@ -18,6 +18,7 @@ const main = defineCommand({
     version: () => import("./commands/version.js").then((m) => m.default),
     doctor: () => import("./commands/doctor.js").then((m) => m.default),
     transcribe: () => import("./commands/transcribe.js").then((m) => m.default),
+    "hermes-zai-config": () => import("./commands/hermes-zai-config.js").then((m) => m.default),
   },
 });
 
