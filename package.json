@@ -1,0 +1,49 @@
+{
+  "name": "@capotej/tools",
+  "version": "0.0.0",
+  "description": "A personal CLI of subcommands for things I do commonly.",
+  "type": "module",
+  "bin": {
+    "tools": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "packageManager": "pnpm@11.21.0",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "tsc",
+    "lint": "pnpm lint:ts && pnpm lint:md && pnpm lint:actions",
+    "lint:ts": "oxlint .",
+    "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
+    "lint:actions": "actionlint",
+    "lint:fix": "oxlint --fix . && markdownlint-cli2 --fix \"**/*.md\"",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "26.2.0",
+    "markdownlint-cli2": "0.23.2",
+    "oxfmt": "0.63.0",
+    "oxlint": "1.78.0",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capotej/tools.git"
+  },
+  "homepage": "https://github.com/capotej/tools",
+  "bugs": {
+    "url": "https://github.com/capotej/tools/issues"
+  },
+  "keywords": [
+    "cli",
+    "tools",
+    "personal"
+  ]
+}

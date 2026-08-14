@@ -1,0 +1,12 @@
+{
+  "config": {
+    "default": true,
+    // long lines are common in README tables and fenced code blocks
+    "MD013": false,
+    // inline HTML is used in the README
+    "MD033": false,
+    // README/AGENTS don't start with a heading
+    "MD041": false
+  },
+  "ignores": ["node_modules/", "CHANGELOG.md", ".claude/", ".harness/"]
+}

@@ -1,0 +1,3 @@
+[tools]
+node = "24"
+"github:rhysd/actionlint" = "v1.7.7"
