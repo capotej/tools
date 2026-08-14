@@ -16,6 +16,8 @@ const main = defineCommand({
   },
   subCommands: {
     version: () => import("./commands/version.js").then((m) => m.default),
+    doctor: () => import("./commands/doctor.js").then((m) => m.default),
+    transcribe: () => import("./commands/transcribe.js").then((m) => m.default),
   },
 });
 
