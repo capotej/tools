@@ -50,7 +50,7 @@
     "personal"
   ],
   "dependencies": {
-    "citty": "^0.2.2",
+    "citty": "0.2.2",
     "js-yaml": "5.2.2"
   }
 }

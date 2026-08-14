@@ -12,3 +12,7 @@ supportedArchitectures:
     - current
     - arm64
     - x64
+
+# Supply-chain guard: only allow package versions published at least 7 days
+# ago (pnpm 11+ equivalent of the npm `minimumReleaseAge` cooldown).
+minimumReleaseAge: 7

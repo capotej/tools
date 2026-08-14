@@ -21,6 +21,7 @@ Single-binary TypeScript CLI (`tsc`-compiled, no babel/swc) built on **citty** f
    ```
 
 3. Run `pnpm build` to verify. citty auto-discovers the new command for help output — no registry to edit.
+4. Add a row to the tools table in `README.md`.
 
 ## Package Manager
 
@@ -32,6 +33,13 @@ This project uses **pnpm**, declared via the `packageManager` field in `package.
 - Run a script: `pnpm <script>` or `pnpm run <script>`
 - Run a local binary: `pnpm exec <bin>` (e.g. `pnpm exec tsc --noEmit`)
 - In CI or to enforce the lockfile: `pnpm install --frozen-lockfile`
+
+All dependencies are pinned to exact versions — no floating ranges (`^`, `~`).
+When adding or updating a dependency, always pin the exact version.
+
+pnpm enforces a 7-day release cooldown via `minimumReleaseAge: 7` in
+`pnpm-workspace.yaml`: newly published package versions are ineligible for
+resolution until they are at least 7 days old, as a supply-chain guard.
 
 The pnpm version is pinned in `package.json` (`"packageManager": "pnpm@11.21.0"`) and read automatically by corepack. Do not change it unless asked. `pnpm-lock.yaml` is committed and is the source of truth for the dependency tree; `.pnpm-store/` is a cache and is gitignored.
 
