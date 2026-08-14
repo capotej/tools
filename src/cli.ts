@@ -1,28 +1,22 @@
 #!/usr/bin/env node
-import { commandsByName } from "./commands/index.js";
-import { help } from "./commands/help.js";
+import { defineCommand, runMain } from "citty";
+import { resolveVersion } from "./utils/version.js";
 
-async function main(): Promise<void> {
-  const args = process.argv.slice(2);
-  const name = args[0];
-
-  if (!name) {
-    help.run([]);
-    return;
-  }
-
-  const cmd = commandsByName.get(name);
-  if (!cmd) {
-    console.error(`Unknown command: ${name}`);
-    console.error();
-    help.run([]);
-    process.exit(1);
-  }
-
-  await cmd.run(args.slice(1));
-}
-
-main().catch((err: unknown) => {
-  console.error(err);
-  process.exit(1);
+// The root command. citty handles --help/-h and --version/-v automatically.
+//
+// To add a new subcommand:
+//   1. Create src/commands/<name>.ts exporting a citty defineCommand as default
+//   2. Add a lazy entry to subCommands below
+// The lazy import keeps large commands out of the initial load.
+const main = defineCommand({
+  meta: {
+    name: "@capotej/tools",
+    version: resolveVersion(),
+    description: "A personal CLI of subcommands for things I do commonly.",
+  },
+  subCommands: {
+    version: () => import("./commands/version.js").then((m) => m.default),
+  },
 });
+
+runMain(main);

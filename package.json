@@ -48,5 +48,8 @@
     "cli",
     "tools",
     "personal"
-  ]
+  ],
+  "dependencies": {
+    "citty": "^0.2.2"
+  }
 }
