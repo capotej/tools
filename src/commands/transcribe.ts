@@ -42,6 +42,11 @@ export default defineCommand({
       description: "avfoundation audio device to record from",
       default: ":0",
     },
+    language: {
+      type: "string",
+      description: "Spoken language in the recording (ISO 639-1, e.g. English)",
+      default: "English",
+    },
   },
   async run({ args }) {
     const dir = await mkdtemp(join(tmpdir(), "tools-transcribe-"));
@@ -58,6 +63,8 @@ export default defineCommand({
         recPath,
         "--model",
         args.model,
+        "--language",
+        args.language,
         // Keep transcript files out of the temp dir we delete below.
         "--output_dir",
         process.cwd(),
