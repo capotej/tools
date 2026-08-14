@@ -4,12 +4,23 @@ A personal CLI of subcommands for things I do commonly. Run via `npx @capotej/to
 
 ## Architecture
 
-Single-binary TypeScript CLI (`tsc`-compiled, no babel/swc) that dispatches to a registry of subcommands.
+Single-binary TypeScript CLI (`tsc`-compiled, no babel/swc) built on **citty** for argument parsing and command dispatch. citty handles `--help`/`-h`, `--version`/`-v`, auto-generated usage, and subcommand routing.
 
-- Entry point: `src/cli.ts` → `dist/cli.js` (the `bin` target)
-- Commands live in `src/commands/`, each implements the `Command` interface from `src/types.ts`
-- Adding a subcommand: implement the interface, add it to the `commands` array in `src/commands/index.ts`
-- The dispatcher picks up new commands automatically — no central switch statement to edit
+- Entry point: `src/cli.ts` → `dist/cli.js` (the `bin` target). Uses `defineCommand` + `runMain` from citty.
+- Commands live in `src/commands/`, each exports a citty `defineCommand` as default.
+- Subcommands are **lazy-loaded** via dynamic `import()` in `src/cli.ts` so only the invoked command's code is parsed at runtime.
+- Shared utilities live in `src/utils/` (e.g. `version.ts`, the package-version resolver used by both the root `--version` flag and the `version` subcommand).
+
+### Adding a subcommand
+
+1. Create `src/commands/<name>.ts` with a `defineCommand` default export.
+2. Add a lazy entry to the `subCommands` map in `src/cli.ts`:
+
+   ```ts
+   mycmd: () => import("./commands/mycmd.js").then((m) => m.default),
+   ```
+
+3. Run `pnpm build` to verify. citty auto-discovers the new command for help output — no registry to edit.
 
 ## Package Manager
 
@@ -23,6 +34,8 @@ This project uses **pnpm**, declared via the `packageManager` field in `package.
 - In CI or to enforce the lockfile: `pnpm install --frozen-lockfile`
 
 The pnpm version is pinned in `package.json` (`"packageManager": "pnpm@11.21.0"`) and read automatically by corepack. Do not change it unless asked. `pnpm-lock.yaml` is committed and is the source of truth for the dependency tree; `.pnpm-store/` is a cache and is gitignored.
+
+Project-level pnpm settings live in `pnpm-workspace.yaml` (in pnpm 11+, `.npmrc` only handles auth/registry — everything else goes here). It sets `supportedArchitectures` for `os: [current, darwin, linux]` and `cpu: [current, arm64, x64]` so the per-platform native binaries shipped as `optionalDependencies` (TypeScript 7, oxlint, oxfmt) are resolved for every developer OS and CI platform from the single committed lockfile. Without this, a lockfile generated on Linux is missing the darwin packages and `pnpm build` fails on macOS with `Unable to resolve @typescript/typescript-darwin-arm64`.
 
 ## Tool Versions
 
@@ -83,7 +96,9 @@ Configuration lives in `.actionlint.yaml`. New workflow files are discovered aut
 
 All third-party action references in `.github/workflows/` must be pinned to their full 40-character commit SHA with a version tag in a trailing comment:
 
-    uses: owner/repo@<sha> # <tag>
+```yaml
+uses: owner/repo@<sha> # <tag>
+```
 
 Never use tag-only references (e.g. `actions/checkout@v5`). When adding or updating an action, resolve the tag to a SHA using `gh api repos/OWNER/REPO/commits/TAG --jq '.sha'`. Local composite actions (`./.github/actions/*`) are exempt.
 
