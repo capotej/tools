@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.4.0] - 2026-08-15
+
+### Summary
+
+Adds `hermes-workspace-skills`, which registers the workspace
+`.agents/skills` directory under `skills.external_dirs` in the Hermes
+config so in-repo skills (like the `release` skill) load automatically —
+`npx @capotej/tools hermes-workspace-skills`. The merge is idempotent and
+normalizes Hermes's scalar-or-list shape to a list.
+
+Also lands the P017 release skill (`.agents/skills/release`) with a
+backfilled changelog, pins all dependencies to exact versions, and adds a
+7-day pnpm release cooldown (`minimumReleaseAge`) as a supply-chain guard.
+
+### Changes
+
+- 8fb1331 feat: add hermes-workspace-skills command
+- cc0f3e1 docs: add release skill (P017) and maintain a changelog
+- 521066d chore: pin all deps, add pnpm 7d release cooldown, document tools table
+
 ## [0.3.2] - 2026-08-14
 
 ### Summary
