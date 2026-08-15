@@ -120,6 +120,15 @@ CI installs its tools with `jdx/mise-action`, which reads `mise.toml` and puts e
 
 ## Releases
 
+Releases are driven by the `release` skill (`.agents/skills/release/SKILL.md`), not done ad hoc.
+
+- Load the `release` skill whenever release work is requested ("cut a release", "publish", "bump to X", "tag this release"). Do not run release steps (version bumps, tags) outside the skill.
+- The skill's pre-flight aborts if `main` isn't in sync with the remote, the working tree is dirty, any pnpm gate fails, or the README tools table is out of date vs `src/commands/`.
+- Infer the version from commits when one isn't given: new subcommand → minor, everything else → patch. State the chosen version and why before proceeding.
+- Maintain `CHANGELOG.md` (prose summary + `npx` example per release, then commit bullets, newest entry directly under the header). Backfilled through 0.1.0.
+- Bump `version` in `package.json` by hand — never `npm version` (it commits and can fight the VCS workflow).
+- Publishing is OIDC trusted publishing triggered by the `v*` tag push. Push the release commit and tag together; the tag push is the publish.
+
 Releases are tag-triggered and publish to npm via **OIDC trusted publishing** — there is no long-lived `NPM_TOKEN` secret in this repo.
 
 - The release workflow is `.github/workflows/release.yml`, triggered by pushing a `v*` tag.
