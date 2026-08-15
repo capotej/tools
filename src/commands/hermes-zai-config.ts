@@ -1,8 +1,9 @@
-import { readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
-import { homedir } from "node:os";
 import { defineCommand } from "citty";
-import { dump, load } from "js-yaml";
+import {
+  loadHermesConfig,
+  resolveHermesConfigPath,
+  saveHermesConfig,
+} from "../utils/hermes-config.js";
 
 // ${ZAI_API_KEY} is a literal Hermes-side interpolation placeholder — the
 // template below must not accidentally expand it.
@@ -31,19 +32,12 @@ export default defineCommand({
     },
   },
   run({ args }) {
-    const home = process.env.HERMES_HOME ?? join(homedir(), ".hermes");
-    const configPath = args.config ?? join(home, "config.yaml");
+    const configPath = resolveHermesConfigPath(args.config);
 
-    let existing: Record<string, unknown>;
-    try {
-      existing = load(readFileSync(configPath, "utf8")) as Record<string, unknown>;
-    } catch (err) {
-      if ((err as NodeJS.ErrnoException).code === "ENOENT") {
-        console.error(`${configPath}: not found — run Hermes once first or pass --config`);
-        process.exitCode = 1;
-        return;
-      }
-      throw err;
+    const existing = loadHermesConfig(configPath);
+    if (!existing) {
+      process.exitCode = 1;
+      return;
     }
 
     const servers = (existing.mcp_servers ?? {}) as Record<string, unknown>;
@@ -66,7 +60,7 @@ export default defineCommand({
     }
 
     existing.mcp_servers = servers;
-    writeFileSync(configPath, dump(existing), "utf8");
+    saveHermesConfig(configPath, existing);
     console.log(`${configPath}: merged z.ai MCP servers`);
   },
 });

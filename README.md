@@ -10,12 +10,13 @@ npx @capotej/tools <command> [args]
 
 ## Tools
 
-| Tool                                                       | Description                                                      |
-| ---------------------------------------------------------- | ---------------------------------------------------------------- |
-| [`doctor`](./src/commands/doctor.ts)                       | Check that required tools (mise, uv, ffmpeg) are installed       |
-| [`transcribe`](./src/commands/transcribe.ts)               | Record from the microphone and transcribe it with whisper        |
-| [`hermes-zai-config`](./src/commands/hermes-zai-config.ts) | Merge the z.ai MCP server stanza into `$HERMES_HOME/config.yaml` |
-| [`version`](./src/commands/version.ts)                     | Print the installed version                                      |
+| Tool                                                                   | Description                                                      |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [`doctor`](./src/commands/doctor.ts)                                   | Check that required tools (mise, uv, ffmpeg) are installed       |
+| [`transcribe`](./src/commands/transcribe.ts)                           | Record from the microphone and transcribe it with whisper        |
+| [`hermes-zai-config`](./src/commands/hermes-zai-config.ts)             | Merge the z.ai MCP server stanza into `$HERMES_HOME/config.yaml` |
+| [`hermes-workspace-skills`](./src/commands/hermes-workspace-skills.ts) | Register the workspace `.agents/skills` dir in Hermes config     |
+| [`version`](./src/commands/version.ts)                                 | Print the installed version                                      |
 
 ## Development
 
