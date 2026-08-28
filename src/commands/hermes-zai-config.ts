@@ -34,11 +34,9 @@ export default defineCommand({
   run({ args }) {
     const configPath = resolveHermesConfigPath(args.config);
 
+    // A missing config.yaml is fine — loadHermesConfig returns {} and the
+    // merge below writes the stanza into a freshly created file.
     const existing = loadHermesConfig(configPath);
-    if (!existing) {
-      process.exitCode = 1;
-      return;
-    }
 
     const servers = (existing.mcp_servers ?? {}) as Record<string, unknown>;
 

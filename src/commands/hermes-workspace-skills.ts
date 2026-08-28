@@ -34,11 +34,9 @@ export default defineCommand({
       return;
     }
 
+    // A missing config.yaml is fine — loadHermesConfig returns {} and the
+    // merge below writes the key into a freshly created file.
     const existing = loadHermesConfig(configPath);
-    if (!existing) {
-      process.exitCode = 1;
-      return;
-    }
 
     const skills = (existing.skills ?? {}) as Record<string, unknown>;
 
